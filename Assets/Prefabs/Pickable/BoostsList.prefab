@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1407163943110461139
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1407163943110461138}
+  - component: {fileID: 1407163943110461149}
+  m_Layer: 0
+  m_Name: BoostsList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1407163943110461138
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407163943110461139}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1407163943110461149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407163943110461139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9484cc81281ed4844ab0728204174dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boost_sprites:
+  - {fileID: 21300000, guid: dd29253021e24d746b1c3ebaa792a238, type: 3}
+  - {fileID: 21300000, guid: 4f8e2bb0ea7b18842b1664c2681ad678, type: 3}
+  - {fileID: 21300000, guid: 8934ae3e2bf10bb4d958e0680a3b44c6, type: 3}
+  - {fileID: 21300000, guid: c5b0d9f9c25a9aa42b2d8f6623defb4f, type: 3}
+  boosts:
+  - render_name: Energy drink
+    boost_name: energy_drink
+    boost_type: 0
+    max_time: 0
+    modify: 0
+    always: 0
+    buyed: 0
+    price_type: 0
+    price: 2000
+  - render_name: Defuse Kit
+    boost_name: defuse_kit
+    boost_type: 2
+    max_time: 0
+    modify: 0
+    always: 0
+    buyed: 0
+    price_type: 0
+    price: 2500
+  - render_name: Cloud
+    boost_name: cloud
+    boost_type: 3
+    max_time: 0
+    modify: 0
+    always: 0
+    buyed: 0
+    price_type: 0
+    price: 4000
+  - render_name: First Aid Kit
+    boost_name: fisrt_aid_kit
+    boost_type: 1
+    max_time: 0
+    modify: 0
+    always: 0
+    buyed: 0
+    price_type: 0
+    price: 10000

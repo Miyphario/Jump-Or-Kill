@@ -1,0 +1,9 @@
+lastUpgrade=01012
+proj.pluginVersion=0.10.12
+proj.AppId=4974469614
+and.BundleId=com.miyphics.jok
+proj.classDir=Assets
+proj.ConstantsClassName=GPGSIds
+and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--Google+Play+game+services+IDs.+Save+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--app_id--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e4974469614%3c%2fstring%3e%0d%0a++%3c%21--package_name--%3e%0d%0a++%3cstring+name%3d%22package_name%22+translatable%3d%22false%22%3ecom.miyphics.jok%3c%2fstring%3e%0d%0a++%3c%21--achievement+The+first+steps--%3e%0d%0a++%3cstring+name%3d%22achievement_the_first_steps%22+translatable%3d%22false%22%3eCggI7sOBxBIQAhAB%3c%2fstring%3e%0d%0a++%3c%21--achievement+Twice+as+good--%3e%0d%0a++%3cstring+name%3d%22achievement_twice_as_good%22+translatable%3d%22false%22%3eCggI7sOBxBIQAhAC%3c%2fstring%3e%0d%0a++%3c%21--achievement+How+far+will+you+go%3f--%3e%0d%0a++%3cstring+name%3d%22achievement_how_far_will_you_go%22+translatable%3d%22false%22%3eCggI7sOBxBIQAhAD%3c%2fstring%3e%0d%0a++%3c%21--achievement+Are+you+a+robot%3f--%3e%0d%0a++%3cstring+name%3d%22achievement_are_you_a_robot%22+translatable%3d%22false%22%3eCggI7sOBxBIQAhAE%3c%2fstring%3e%0d%0a++%3c%21--achievement+You+are+DEITY%21--%3e%0d%0a++%3cstring+name%3d%22achievement_you_are_deity%22+translatable%3d%22false%22%3eCggI7sOBxBIQAhAF%3c%2fstring%3e%0d%0a++%3c%21--leaderboard+Distance+traveled--%3e%0d%0a++%3cstring+name%3d%22leaderboard_distance_traveled%22+translatable%3d%22false%22%3eCggI7sOBxBIQAhAG%3c%2fstring%3e%0d%0a%3c%2fresources%3e
+and.ClientId=4974469614-d0kch3do3eevjs8ielrvh78mqc1m5oil.apps.googleusercontent.com
+android.SetupDone=true
