@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,9 @@ public class GameHUD : MonoBehaviour
     [Header("Player")]
     [SerializeField] private List<GameObject> _playerHealthLayers = new();
 
+    [Header("HUDs")]
+    [SerializeField] private MobileControls _mobileControls;
+
     public void Init()
     {
         if (Instance == null)
@@ -28,12 +32,21 @@ public class GameHUD : MonoBehaviour
             return;
         }
 
+        _mobileControls.Init();
+
         StartCoroutine(UpdateFps());
+
+        GameController.Instance.OnPlayerCreated += HandlePlayerCreated;
+    }
+
+    private void HandlePlayerCreated(ThisIsPlayer player)
+    {
+        UpdateHearts(false);
     }
 
     private void Start()
     {
-        UpdateHearts(false);
+        //UpdateHearts(false);
     }
 
     private void Update()

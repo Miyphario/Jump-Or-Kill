@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class RangeWeapon : Weapon
 {
-    [SerializeField] private GameObject _bullet;
-    [SerializeField] private bool _isBullet = false;
+    [Header("Range")]
+    [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _bulletSpeed = 3f;
     [SerializeField] private float _bullRotateSpeed = 6f;
-    [SerializeField] private int _currentLine = 2;
+    private int _currentLine = 2;
+    private bool _isBullet = false;
 
     private bool _isPlayer = false;
 
@@ -22,13 +23,18 @@ public class RangeWeapon : Weapon
             _isPlayer = true;
     }
 
+    public void SetBullet(Creature myCreature)
+    {
+        _isBullet = true;
+        _myCreature = myCreature;
+    }
+
     public override void Attack()
     {
-        if (!_canAttack) return;
         if (_isBullet) return;
 
-        RangeWeapon bull = Instantiate(_bullet, transform.position, Quaternion.identity).transform.GetComponent<RangeWeapon>();
-        bull._myCreature = _myCreature;
+        RangeWeapon bull = Instantiate(_bulletPrefab, transform.position, Quaternion.identity).transform.GetComponent<RangeWeapon>();
+        bull.SetBullet(_myCreature);
 
         // Calculate near line
         if (_myCreature.CurrentLine != _myCreature.LineToMove)
@@ -40,7 +46,6 @@ public class RangeWeapon : Weapon
             bull._currentLine = _myCreature.CurrentLine;
         }
 
-        bull._isBullet = true;
         bull.transform.rotation = _myCreature.transform.rotation;
         Rigidbody2D bRb = bull.transform.GetComponent<Rigidbody2D>();
         if (_isPlayer)
@@ -55,10 +60,16 @@ public class RangeWeapon : Weapon
     {
         if (!_isBullet) return;
 
-        Creature tar;
+        if (_isPlayer)
+        {
+            if (collision.CompareTag("Player")) return;
+        }
+        else
+        {
+            if (collision.CompareTag("Enemy")) return;
+        }
 
-        tar = collision.transform.GetComponent<Creature>();
-        if (tar == null || tar.Die) return;
+        if (!collision.TryGetComponent<Creature>(out var tar)) return;
 
         if (tar.CurrentLine == _currentLine || tar.LineToMove == _currentLine)
         {

@@ -4,8 +4,6 @@ public class MeleeWeapon : Weapon
 {
     public override void Attack()
     {
-        if (!_canAttack) return;
-
         RaycastHit2D[] hits = Physics2D.CircleCastAll(_myCreature.Skin.AttackPoint.position, _attackRange, Vector2.zero, 0f, _myCreature.AttackLayers);
 
         Creature tar;

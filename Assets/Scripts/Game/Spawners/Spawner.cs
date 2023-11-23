@@ -386,8 +386,8 @@ public class Spawner : MonoBehaviour
                             ThisIsEnemy en = GameController.Instance.EnemiesQueueObject.transform.GetChild(j).transform.GetComponent<ThisIsEnemy>();
                             if (en.InQueue)
                             {
-                                en.Init(eRange, baseZOrder, eLineChg);
-                                en.SetFromQueue(enPos, enSpawnLine);
+                                en.Init(eRange, eLineChg);
+                                en.SetFromQueue(enPos, enSpawnLine, baseZOrder);
                                 canGet = true;
                                 break;
                             }
@@ -484,7 +484,7 @@ public class Spawner : MonoBehaviour
     public void InstantiateEnemy(Vector3 position, Quaternion rotation, int currentLine, int ZOrder, bool isRange, bool canChangeLine)
     {
         ThisIsEnemy en = Instantiate(enemyPrefab, position, rotation, GameController.Instance.EnemiesQueueObject.transform).transform.GetComponent<ThisIsEnemy>();
-        en.Init(isRange, ZOrder, canChangeLine, currentLine, GameController.Instance.Player);
+        en.Init(isRange, canChangeLine, ZOrder, currentLine, GameController.Instance.Player);
     }
 
     public void InstantiateDestructible(Vector3 position, Quaternion rotation, int currentLine, int ZOrder)

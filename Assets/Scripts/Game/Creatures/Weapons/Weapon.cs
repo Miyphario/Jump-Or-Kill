@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEditor.UI;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
@@ -9,7 +10,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected float _reloadSpeed = 1f;
     [SerializeField] protected float _attackRange = 0.7f;
     public float AttackRange => _attackRange;
-    [SerializeField] protected bool _canAttack = true;
+    protected bool _canAttack = true;
     public bool CanAttack => _canAttack;
     [SerializeField] protected float _attackDistance = 2.5f;
     public float AttackDistance => _attackDistance;
@@ -23,7 +24,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected string _weaponName;
     [SerializeField] protected string _description;
     [SerializeField] protected int _price;
-    [SerializeField] protected int _currency;
+    [SerializeField] protected PriceType _currency;
     [SerializeField] protected bool _purchased;
     [SerializeField] protected bool _selected;
 
@@ -46,11 +47,25 @@ public abstract class Weapon : MonoBehaviour
     {
         if (_reloadRoutine != null) StopCoroutine(_reloadRoutine);
         _reloadRoutine = StartCoroutine(ReloadIE());
+
+        transform.localScale = new();
     }
 
     private IEnumerator ReloadIE()
     {
-        yield return new WaitForSeconds(_reloadSpeed);
+        float reloadTime = 0f;
+        float sleepTime = 0.2f;
+
+        while(reloadTime < _reloadSpeed)
+        {
+            float wait = (reloadTime + sleepTime < _reloadSpeed) ? sleepTime : (_reloadSpeed - reloadTime);
+
+            yield return new WaitForSeconds(wait);
+            reloadTime += wait;
+            float size = reloadTime / _reloadSpeed;
+            transform.localScale = new(size, size, size);
+        }
+
         _canAttack = true;
     }
 }

@@ -15,23 +15,30 @@ public class ThisIsEnemy : Creature
     public override void Awake()
     {
         base.Awake();
+        _attackLayers = LayerMask.GetMask("Player");
         _input.x = -1f;
         UpdateWarning(false);
     }
 
-    public void Init(bool isRange, int ZOrder, bool canChangeLine)
+    public void Init(bool isRange, bool canChangeLine)
     {
         _isRange = isRange;
-        _skin.ChangeZOrder(ZOrder);
         CanChangeLine = canChangeLine;
+        _input.x = -1f;
     }
 
-    public void Init(bool isRange, int ZOrder, bool canChangeLine, int line, Creature myEnemy)
+    public void Init(bool isRange, bool canChangeLine, int line, Creature myEnemy)
     {
         _myEnemy = myEnemy;
         CurrentLine = line;
         LineToMove = line;
-        Init(isRange, ZOrder, canChangeLine);
+        Init(isRange, canChangeLine);
+    }
+
+    public void Init(bool isRange, bool canChangeLine, int ZOrder, int line, Creature myEnemy)
+    {
+        _skin.ChangeZOrder(ZOrder);
+        Init(isRange, canChangeLine, line, myEnemy);
     }
 
     public override void Start()
@@ -66,7 +73,7 @@ public class ThisIsEnemy : Creature
         StopAllCoroutines();
     }
 
-    public void SetFromQueue(Vector3 position, int line)
+    public void SetFromQueue(Vector3 position, int line, int ZOrder)
     {
         CurrentLine = line;
         LineToMove = line;
@@ -76,18 +83,16 @@ public class ThisIsEnemy : Creature
         _animator.SetBool("Death", Die);
         _weapon.Init(this);
 
+        _skin.SetDefaultZOrder();
         if (_isRange)
             CreateWeapon(PrefabManager.Instance.EnemyRangeWeapon, true);
         else
             CreateWeapon(PrefabManager.Instance.EnemyMeleeWeapon, true);
 
         _skin.RemoveLastSpriteFromList();
-        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").transform.GetComponent<SpriteRenderer>());
-
-        //if (_skin._ZOrder > -1)
-        //{
-        //    _skin.ChangeZOrder(_skin._ZOrder);
-        //}
+        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").GetComponent<SpriteRenderer>());
+        _skin.UpdateDefaultValues();
+        _skin.ChangeZOrder(ZOrder);
 
         transform.position = position;
 
@@ -108,14 +113,14 @@ public class ThisIsEnemy : Creature
         {
             if (!Die)
             {
-                Speed = new(-(GameController.Instance.PlayerSpeed + GameController.Instance.EnemySpeedOffset), Speed.y);
+                Speed = new(GameController.Instance.PlayerSpeed + GameController.Instance.EnemySpeedOffset, Speed.y);
             }
             else
             {
-                Speed = new(-GameController.Instance.PlayerSpeed, Speed.y);
+                Speed = new(GameController.Instance.PlayerSpeed, Speed.y);
             }
 
-            _rb.velocity = new Vector2(Speed.x, _rb.velocity.y);
+            _rb.velocity = new Vector2(_input.x * Speed.x, _rb.velocity.y);
         }
     }
 

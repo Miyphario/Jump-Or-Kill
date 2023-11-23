@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine.Advertisements;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class GameController : MonoBehaviour
     public static GameController Instance { get; private set; }
 
     [Header("Player")]
-    [SerializeField] private float _playerSpeed = 0.5f;
+    [SerializeField] private float _playerSpeed = 3f;
     public float PlayerSpeed => _playerSpeed;
     [SerializeField] private PlayerData playerData;
     public PlayerData PlayerData => playerData;
@@ -46,6 +47,8 @@ public class GameController : MonoBehaviour
 
     private float timeToUpdateSpeed = 2f;
 
+    public event Action<ThisIsPlayer> OnPlayerCreated;
+
     public void Init()
     {
         if (Instance == null)
@@ -66,12 +69,13 @@ public class GameController : MonoBehaviour
     {
         StartCoroutine(AddToPlayerSpeed());
         _player = Instantiate(PrefabManager.Instance.PlayerPrefab, new Vector3(-5f, 0.35f, 0f), Quaternion.identity).GetComponent<ThisIsPlayer>();
+        OnPlayerCreated?.Invoke(_player);
     }
 
     public GameObject LoadCurrentWeapon()
     {
         GameObject wlo = Instantiate(PrefabManager.Instance.WeaponsListPrefab, transform);
-        GameObject wp = wlo.transform.GetComponent<ItemsList>().currentItem;
+        GameObject wp = wlo.GetComponent<ItemsList>().currentItem;
         Destroy(wlo);
         return wp;
     }

@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour
 {
-    private int _currentLine;
     [SerializeField] private float _damage = 1f;
-    [SerializeField] protected bool _activated = true;
+    private int _currentLine;
+    protected bool _activated = true;
 
-    [SerializeField] private float _speedX;
-    [SerializeField] private float _inputX;
-    [SerializeField] protected Creature _myEnemy;
-    [SerializeField] private bool _inQueue;
+    private float _speedX;
+    private float _inputX;
+    protected Creature _myEnemy;
+    private bool _inQueue;
     public bool InQueue => _inQueue;
 
-    [SerializeField] private SkinFunctions _skin;
+    private SkinFunctions _skin;
     private Rigidbody2D _rb;
 
     protected SpriteRenderer _mySprite;
@@ -22,12 +22,12 @@ public class Destructible : MonoBehaviour
     public virtual void Awake()
     {
         _mySprite = transform.Find("Sprite").transform.GetComponent<SpriteRenderer>();
-        _audioSource = transform.GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
 
         _skin = _mySprite.transform.GetComponent<SkinFunctions>();
         _skin.AddSpriteToList(_mySprite);
 
-        _rb = transform.GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     public void Init(int ZOrder)
@@ -52,7 +52,7 @@ public class Destructible : MonoBehaviour
     {
         if (_activated)
         {
-            Creature e = collision.transform.GetComponent<Creature>();
+            Creature e = collision.GetComponent<Creature>();
             if (e == _myEnemy)
             {
                 if (e.CurrentLine == _currentLine || e.LineToMove == _currentLine)

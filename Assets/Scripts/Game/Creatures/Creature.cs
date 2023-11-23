@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Creature : MonoBehaviour
@@ -8,7 +9,7 @@ public class Creature : MonoBehaviour
     public bool Die { get; protected set; }
     public bool God { get; protected set; }
 
-    [SerializeField] private LayerMask _attackLayers;
+    protected LayerMask _attackLayers;
     public LayerMask AttackLayers => _attackLayers;
 
     public Vector2 MaxSpeed { get; protected set; } = new(3f, 3f);
@@ -27,7 +28,7 @@ public class Creature : MonoBehaviour
     public SkinFunctions Skin => _skin;
     protected Weapon _weapon;
 
-    [SerializeField] private Transform _floor;
+    [SerializeField] private Collider2D _floor;
     protected Rigidbody2D _rb;
     protected Animator _animator;
     protected GameObject _myShadow;
@@ -81,7 +82,7 @@ public class Creature : MonoBehaviour
             }
         }
 
-        Weapon tWp = weaponToCreate.transform.GetComponent<Weapon>();
+        Weapon tWp = weaponToCreate.GetComponent<Weapon>();
 
         // Get hand transform
         Transform hand = tWp.RightArm ? _skin.RightArm : _skin.LeftArm;
@@ -123,13 +124,19 @@ public class Creature : MonoBehaviour
     {
         if (InAir || CurrentLine != LineToMove) return;
 
+        InAir = true;
         _animator.SetBool("Walk", false);
         _animator.SetTrigger("Jump");
         _rb.gravityScale = 1f;
-        InAir = true;
-        //prevJumpPos = CalcLineToY(currentLine);
-        _floor.parent = null;
         _rb.velocity = new(_rb.velocity.x, Vector2.up.y * JumpHeight);
+        StartCoroutine(FloorMoveIE());
+    }
+
+    private IEnumerator FloorMoveIE()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _floor.transform.parent.parent = null;
+        _floor.enabled = true;
     }
 
     public virtual void ChangeLine(int line)
@@ -202,7 +209,7 @@ public class Creature : MonoBehaviour
             else
             {
                 float posY = LineToY(CurrentLine);
-                _floor.position = new(transform.position.x, posY);
+                _floor.transform.parent.position = new(transform.position.x, posY);
 
                 if (_rb.velocity.y <= 0f)
                 {
@@ -226,7 +233,7 @@ public class Creature : MonoBehaviour
     {
         if (DisabledInput || Die) return;
 
-        _rb.velocity = new(_input.x * Speed.x * Time.fixedDeltaTime, _rb.velocity.y);
+        _rb.velocity = new(_input.x * Speed.x, _rb.velocity.y);
 
         //if (CurrentLine == LineToMove) return;
 
@@ -252,8 +259,6 @@ public class Creature : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log($"Collider tag: {collision.collider.tag}");
-
         if (collision.collider.CompareTag("Floor"))
         {
             if (InAir)
@@ -266,8 +271,9 @@ public class Creature : MonoBehaviour
                 _animator.SetTrigger("Grounded");
 
                 _rb.gravityScale = 0f;
-                _floor.parent = transform;
-                _floor.localPosition = new();
+                _floor.transform.parent.parent = transform;
+                _floor.transform.parent.localPosition = new();
+                _floor.enabled = false;
 
                 InAir = false;
 

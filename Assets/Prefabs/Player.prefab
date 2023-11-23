@@ -110,10 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5197b14f0ce4b87498aabe33cfdaf476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackLayers:
-    serializedVersion: 2
-    m_Bits: 128
-  _floor: {fileID: 1106749706975525593}
+  _floor: {fileID: 193237402745095719}
 --- !u!1 &2281761784254804697
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,7 +122,7 @@ GameObject:
   - component: {fileID: 1106749706975525593}
   m_Layer: 6
   m_Name: Floor
-  m_TagString: Floor
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,7 +155,7 @@ GameObject:
   - component: {fileID: 193237402745095719}
   m_Layer: 6
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -185,7 +182,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2890580545485707514}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

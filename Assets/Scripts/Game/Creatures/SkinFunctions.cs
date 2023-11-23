@@ -29,12 +29,17 @@ public class SkinFunctions : MonoBehaviour
             _spritesToChange.Add(spriteRend);
         }
 
+        _audioSource = GetComponent<AudioSource>();
+
+        UpdateDefaultValues();
+    }
+
+    public void UpdateDefaultValues()
+    {
         foreach (SpriteRenderer sp in _spritesToChange)
         {
             _defaultSpritesOrder.Add(sp.sortingOrder);
         }
-
-        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -58,6 +63,14 @@ public class SkinFunctions : MonoBehaviour
         foreach (SpriteRenderer sr in _spritesToChange)
         {
             sr.sortingOrder += value;
+        }
+    }
+
+    public void UpdateZOrder()
+    {
+        if (_ZOrder > -1)
+        {
+            ChangeZOrder(_ZOrder);
         }
     }
 

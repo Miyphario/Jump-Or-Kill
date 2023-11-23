@@ -4,10 +4,12 @@ public class ThisIsPlayer : Creature
 {
     private int _kills;
     public int Kills => _kills;
+    private float _timerToChangeLine;
 
     public override void Awake()
     {
         base.Awake();
+        _attackLayers = LayerMask.GetMask("Enemy");
         Health = 3;
         CreateWeapon(GameController.Instance.LoadCurrentWeapon(), false);
     }
@@ -31,7 +33,19 @@ public class ThisIsPlayer : Creature
         }
 
         float inY = -Input.GetAxisRaw("Vertical");
-        ChangeLine((int)inY);
+        if (_timerToChangeLine <= 0f)
+        {
+            if (inY != 0f)
+            {
+                ChangeLine((int)inY);
+                _timerToChangeLine = 0.3f;
+            }
+        }
+
+        if (_timerToChangeLine > 0f)
+        {
+            _timerToChangeLine -= Time.deltaTime;
+        }
 
         if (Input.GetMouseButton(0))
         {
