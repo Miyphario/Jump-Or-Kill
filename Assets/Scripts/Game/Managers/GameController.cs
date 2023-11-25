@@ -155,6 +155,40 @@ public class GameController : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public static void TakeScreenshot()
+    {
+        string path = Application.persistentDataPath + "/screenshots";
+        int files_count;
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        string[] f = Directory.GetFiles(path + "/");
+        files_count = f.Length;
+
+        ScreenCapture.CaptureScreenshot(path + "/jumporkill_" + files_count + ".png");
+    }
+
+    //public void SaveScore()
+    //{
+    //    Creature ep = _player.GetComponent<Creature>();
+    //    SaveSystem.SaveScore(ep);
+
+    //    GameData data = SaveSystem.LoadData();
+    //    if (data == null)
+    //    {
+    //        data = new GameData(ep);
+    //    }
+    //    else
+    //    {
+    //        data.money += ep.money;
+    //        data.gems += ep.gems;
+    //        data.snowballs += ep.snowballs;
+    //    }
+
+    //    SaveSystem.SaveData(data);
+    //}
 }
 
     /*
@@ -238,26 +272,6 @@ public class GameController : MonoBehaviour
         Destroy(wp);
     }
 
-    public void SaveScore()
-    {
-        BaseEntity ep = player.GetComponent<BaseEntity>();
-        SaveSystem.SaveScore(ep);
-
-        GameData data = SaveSystem.LoadData();
-        if (data == null)
-        {
-            data = new GameData(ep);
-        }
-        else
-        {
-            data.money += ep.money;
-            data.gems += ep.gems;
-            data.snowballs += ep.snowballs;
-        }
-
-        SaveSystem.SaveData(data);
-    }
-
     public static bool IsMobile()
     {
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
@@ -268,20 +282,6 @@ public class GameController : MonoBehaviour
         {
             return false;
         }
-    }
-
-    public static void TakeScreenshot()
-    {
-        string path = Application.persistentDataPath + "/screenshots";
-        int files_count;
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-        string[] f = Directory.GetFiles(path + "/");
-        files_count = f.Length;
-
-        ScreenCapture.CaptureScreenshot(path + "/jumporkill_" + files_count + ".png");
     }
 
     public SkinsList GetSkins()

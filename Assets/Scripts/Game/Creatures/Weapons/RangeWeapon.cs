@@ -47,11 +47,11 @@ public class RangeWeapon : Weapon
         }
 
         bull.transform.rotation = _myCreature.transform.rotation;
-        Rigidbody2D bRb = bull.transform.GetComponent<Rigidbody2D>();
+        Rigidbody2D bRb = bull.GetComponent<Rigidbody2D>();
         if (_isPlayer)
             bRb.velocity = new Vector2(_bulletSpeed, 0f);
         else
-            bRb.velocity = new Vector2(-(_bulletSpeed + _myCreature.Speed.x / 10f), 0f);
+            bRb.velocity = new Vector2(-(_bulletSpeed + _myCreature.Speed.x + GameController.Instance.EnemySpeedOffset), 0f);
 
         Reload();
     }

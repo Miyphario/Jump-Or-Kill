@@ -55,9 +55,9 @@ public class Creature : MonoBehaviour
 
     private void UpdateSkin()
     {
-        _skin = transform.GetChild(0).transform.GetComponent<SkinFunctions>();
+        _skin = transform.GetChild(0).GetComponent<SkinFunctions>();
         _skin.Init(this);
-        _animator = _skin.transform.GetComponent<Animator>();
+        _animator = _skin.GetComponent<Animator>();
     }
     private void CreateShadow()
     {

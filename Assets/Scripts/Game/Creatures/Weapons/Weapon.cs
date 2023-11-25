@@ -54,14 +54,14 @@ public abstract class Weapon : MonoBehaviour
     private IEnumerator ReloadIE()
     {
         float reloadTime = 0f;
-        float sleepTime = 0.2f;
+        float sleepTime = 0.1f;
 
-        while(reloadTime < _reloadSpeed)
+        while (reloadTime < _reloadSpeed)
         {
-            float wait = (reloadTime + sleepTime < _reloadSpeed) ? sleepTime : (_reloadSpeed - reloadTime);
+            sleepTime = (reloadTime + sleepTime < _reloadSpeed) ? sleepTime : (_reloadSpeed - reloadTime);
 
-            yield return new WaitForSeconds(wait);
-            reloadTime += wait;
+            yield return new WaitForSeconds(sleepTime);
+            reloadTime += sleepTime;
             float size = reloadTime / _reloadSpeed;
             transform.localScale = new(size, size, size);
         }

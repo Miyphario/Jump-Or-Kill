@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class ThisIsEnemy : Creature
@@ -61,7 +62,6 @@ public class ThisIsEnemy : Creature
 
     public void AddToQueue()
     {
-        _inQueue = true;
         _input.y = 0f;
         _rb.velocity = new Vector2(0f, 0f);
         transform.position = new Vector3(-20f, 0f, 0f);
@@ -71,32 +71,39 @@ public class ThisIsEnemy : Creature
         _animator.SetBool("Walk", false);
         UpdateWarning(false);
         StopAllCoroutines();
+
+        _inQueue = true;
     }
 
     public void SetFromQueue(Vector3 position, int line, int ZOrder)
     {
+        EditorApplication.isPaused = true;
+
+        _inQueue = false;
+
         CurrentLine = line;
         LineToMove = line;
         Die = false;
         DisabledInput = false;
+
         Health = 1f;
         _animator.SetBool("Death", Die);
         _weapon.Init(this);
 
-        _skin.SetDefaultZOrder();
         if (_isRange)
             CreateWeapon(PrefabManager.Instance.EnemyRangeWeapon, true);
         else
             CreateWeapon(PrefabManager.Instance.EnemyMeleeWeapon, true);
 
+        EditorApplication.isPaused = true;
         _skin.RemoveLastSpriteFromList();
+        EditorApplication.isPaused = true;
         _skin.AddSpriteToList(_weapon.transform.Find("Sprite").GetComponent<SpriteRenderer>());
-        _skin.UpdateDefaultValues();
+        EditorApplication.isPaused = true;
         _skin.ChangeZOrder(ZOrder);
+        EditorApplication.isPaused = true;
 
         transform.position = position;
-
-        _inQueue = false;
 
         StartCoroutine(AddToQueueByDistance());
         StartCoroutine(CheckEnemyDistance());

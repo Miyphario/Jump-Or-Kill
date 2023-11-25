@@ -18,7 +18,7 @@ public class ThisIsPlayer : Creature
     {
         base.Start();
 
-        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").transform.GetComponent<SpriteRenderer>());
+        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").GetComponent<SpriteRenderer>());
         _skin.ChangeSortingLayer("Player");
     }
 

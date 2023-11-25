@@ -1,64 +1,59 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
     #region Money
     [Header("Money")]
-    public GameObject moneyObject;
+    [SerializeField] private GameObject moneyObject;
 
-    public int maxCoinsSpawned = 3;
+    [SerializeField] private int maxCoinsSpawned = 3;
     private int curCoinsSpawned = 0;
-    public int increaseCoinsInLine = 0;
-    public int increaseCoinsInLineMax = 25;
+    [SerializeField] private int increaseCoinsInLine = 0;
+    [SerializeField] private int increaseCoinsInLineMax = 25;
 
-    public int maxQueueMoneys = 50;
+    [SerializeField] private int maxQueueMoneys = 50;
 
     // Time to spawn next line of money
-    public float timeToNextMoneyLine = 7f;
+    [SerializeField] private float timeToNextMoneyLine = 7f;
 
-    public float snowballChance = 35f;
-    public float gemChance = 0.02f;
+    [SerializeField] private float snowballChance = 35f;
+    [SerializeField] private float gemChance = 0.02f;
 
-    [HideInInspector] public Coroutine moneyCoroutine;
+    private Coroutine moneyCoroutine;
     #endregion /Money
 
     #region Enemies
     [Header("Enemies")]
-    public GameObject enemyPrefab;
-    public int maxEnemiesInLine = 2;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private int maxEnemiesInLine = 2;
     private int curEnemyInLine = 0;
-    public int increaseEnemiesInLine = 0;
-    public int increaseEnemiesInLineMax = 20;
+    [SerializeField] private int increaseEnemiesInLine = 0;
+    [SerializeField] private int increaseEnemiesInLineMax = 20;
 
     // Enemies chances
-    public float rangeEnemyChance = 35f; // Chance to spawn range weapon enemy
-    public float lineChangingEnemyChance = 35f; // Chance to spawn line change enemy
+    [SerializeField] private float rangeEnemyChance = 35f; // Chance to spawn range weapon enemy
+    [SerializeField] private float lineChangingEnemyChance = 35f; // Chance to spawn line change enemy
 
-    public int maxQueueEnemies = 50;
+    [SerializeField] private int maxQueueEnemies = 50;
 
     // Time for spawn next line of enemies
-    public float timeToNextEnemyLine = 7f;
+    [SerializeField] private float timeToNextEnemyLine = 7f;
 
-    [HideInInspector] public Coroutine enemiesCoroutine;
+    private Coroutine enemiesCoroutine;
     #endregion /Enemies
 
     #region Destructible
     [Header("Destructible")]
     // Destructible use enemy coroutine and timers
-    public GameObject destructiblePrefab;
-    public int maxDestructibleInLine = 2;
+    [SerializeField] private GameObject destructiblePrefab;
+    [SerializeField] private int maxDestructibleInLine = 2;
     private int curDestructibleInLine = 0;
-    public int increaseDestructibleInLine = 0;
-    public int increaseDestructibleInLineMax = 10;
+    [SerializeField] private int increaseDestructibleInLine = 0;
+    [SerializeField] private int increaseDestructibleInLineMax = 10;
 
-    public int maxQueueDestructible = 50;
+    [SerializeField] private int maxQueueDestructible = 50;
     #endregion /Destructible
-
-    [Header("Other")]
-    public GameController gameController;
-
 
     private void Awake()
     {
@@ -347,7 +342,7 @@ public class Spawner : MonoBehaviour
                     // Enemy spawning attributes
                     int enSpawnLine = secLine > 0 ? secLine : curLine; // Line
                     float enSpawnY = secLine > 0 ? secLinePosY : yPos; // Y position
-                    Vector3 enPos = new Vector3(xPos + i * 1.5f, enSpawnY, 0f); // Spawn position
+                    Vector3 enPos = new(xPos + i * 1.5f, enSpawnY, 0f); // Spawn position
                     Quaternion enRot = Quaternion.Euler(0f, 180f, 0f); // Spawn rotation
 
 
@@ -431,7 +426,7 @@ public class Spawner : MonoBehaviour
                     // Destructible spawning attributes
                     int spawnLine = secLine > 0 ? secLine : curLine; // Line
                     float spawnY = secLine > 0 ? secLinePosY : yPos; // Y position
-                    Vector3 posit = new Vector3(xPos + i * 1.5f, spawnY, 0f); // Spawn position
+                    Vector3 posit = new(xPos + i * 1.5f, spawnY, 0f); // Spawn position
                     Quaternion rotat = Quaternion.Euler(0f, 180f, 0f); // Spawn rotation
 
                     // If destructible queue is empty
