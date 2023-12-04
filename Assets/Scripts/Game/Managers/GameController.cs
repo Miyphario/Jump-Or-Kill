@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using UnityEngine.Advertisements;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
@@ -13,7 +12,10 @@ public class GameController : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] private float _playerSpeed = 3f;
+    private float _minPlayerSpeed = 3f;
+    private float _maxPlayerSpeed = 10f;
     public float PlayerSpeed => _playerSpeed;
+    public float PlayerSpeedPercent => 100 * (_playerSpeed - _minPlayerSpeed) / (_maxPlayerSpeed - _minPlayerSpeed);
     [SerializeField] private PlayerData playerData;
     public PlayerData PlayerData => playerData;
     private ThisIsPlayer _player;
@@ -22,7 +24,7 @@ public class GameController : MonoBehaviour
     public float DistanceTraveled => _distanceTraveled;
     public Camera MainCamera { get; private set; }
 
-    [SerializeField] private EnvironmentScroller road;
+    [SerializeField] private EnvironmentScroller _road;
 
     [Header("Queues")]
     [SerializeField] private Spawner _spawner;
@@ -36,9 +38,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private float _enemySpeedOffset = 0.8f;
     public float EnemySpeedOffset => _enemySpeedOffset;
 
-    private bool refreshSpeed = false;
-
-    [SerializeField] private static EventType _currentEvent;
+    private static EventType _currentEvent;
     public static EventType CurrentEvent => _currentEvent;
 
     [Space]
@@ -48,6 +48,7 @@ public class GameController : MonoBehaviour
     private float timeToUpdateSpeed = 2f;
 
     public event Action<ThisIsPlayer> OnPlayerCreated;
+    public event Action<float> OnSpeedUpdated;
 
     public void Init()
     {
@@ -70,6 +71,7 @@ public class GameController : MonoBehaviour
         StartCoroutine(AddToPlayerSpeed());
         _player = Instantiate(PrefabManager.Instance.PlayerPrefab, new Vector3(-5f, 0.35f, 0f), Quaternion.identity).GetComponent<ThisIsPlayer>();
         OnPlayerCreated?.Invoke(_player);
+        OnSpeedUpdated?.Invoke(PlayerSpeed);
     }
 
     public GameObject LoadCurrentWeapon()
@@ -80,25 +82,22 @@ public class GameController : MonoBehaviour
         return wp;
     }
 
-    public void GlobalUpdateSpeed(float value)
+    private void GlobalUpdateSpeed(float value)
     {
-        _playerSpeed += value;
+        _playerSpeed = Mathf.Clamp(_playerSpeed + value, _minPlayerSpeed, _maxPlayerSpeed);
+        OnSpeedUpdated?.Invoke(_playerSpeed);
 
-        road.UpdateSpeed();
+        //for (int i = 0; i < _moneyQueueObject.transform.childCount; i++)
+        //{
+        //    Pickable pck = _moneyQueueObject.transform.GetChild(i).transform.GetComponent<Pickable>();
+        //    pck.UpdateSpeed();
+        //}
 
-        _spawner.UpdateSpeed();
-
-        for (int i = 0; i < _moneyQueueObject.transform.childCount; i++)
-        {
-            Pickable pck = _moneyQueueObject.transform.GetChild(i).transform.GetComponent<Pickable>();
-            pck.UpdateSpeed();
-        }
-
-        for (int i = 0; i < _enemiesQueueObject.transform.childCount; i++)
-        {
-            ThisIsEnemy en = _enemiesQueueObject.transform.GetChild(i).transform.GetComponent<ThisIsEnemy>();
-            en.UpdateSpeed();
-        }
+        //for (int i = 0; i < _enemiesQueueObject.transform.childCount; i++)
+        //{
+        //    ThisIsEnemy en = _enemiesQueueObject.transform.GetChild(i).transform.GetComponent<ThisIsEnemy>();
+        //    en.UpdateSpeed();
+        //}
     }
 
     public void Update()
@@ -112,20 +111,13 @@ public class GameController : MonoBehaviour
 
         if (!GameIsPaused)
         {
-            if (refreshSpeed)
-            {
-                GlobalUpdateSpeed(0.02f);
-
-                refreshSpeed = false;
-            }
-
             _distanceTraveled += _playerSpeed / 2f * Time.deltaTime;
         }
     }
 
-    public IEnumerator AddToPlayerSpeed()
+    private IEnumerator AddToPlayerSpeed()
     {
-        while (_playerSpeed < 18)
+        while (true)
         {
             if (!GameIsPaused)
             {
@@ -168,6 +160,38 @@ public class GameController : MonoBehaviour
         files_count = f.Length;
 
         ScreenCapture.CaptureScreenshot(path + "/jumporkill_" + files_count + ".png");
+    }
+
+    public float LineToY(int line)
+    {
+        return line switch
+        {
+            1 => RoadYs[0],
+            2 => RoadYs[1],
+            3 => RoadYs[2],
+            _ => 0f,
+        };
+    }
+
+    public int YToLine(float posY)
+    {
+        int curLine = 0;
+        float diff = float.MaxValue;
+
+        int i = 1;
+        foreach (float p in RoadYs)
+        {
+            float dist = Mathf.Abs(p - posY);
+            if (dist < diff)
+            {
+                curLine = i;
+                diff = dist;
+            }
+
+            i++;
+        }
+
+        return curLine;
     }
 
     //public void SaveScore()

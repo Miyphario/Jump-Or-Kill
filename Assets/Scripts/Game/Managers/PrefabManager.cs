@@ -24,7 +24,7 @@ public class PrefabManager : MonoBehaviour
 
     [Header("Pickable")]
     [SerializeField] private List<Sprite> _moneySprites;
-    public List<Sprite> MoneySprites => _moneySprites;
+    public IReadOnlyList<Sprite> MoneySprites => _moneySprites;
     [SerializeField] private Sprite _snowballSprite;
     public Sprite SnowballSprite => _snowballSprite;
     [SerializeField] private Sprite _gemSprite;
