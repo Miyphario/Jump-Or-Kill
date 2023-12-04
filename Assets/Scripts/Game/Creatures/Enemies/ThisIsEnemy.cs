@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class ThisIsEnemy : Creature
@@ -12,7 +13,7 @@ public class ThisIsEnemy : Creature
 
     private float _timeToChangeLine = 2f;
 
-    protected override void Awake()
+    public override void Awake()
     {
         base.Awake();
         _attackLayers = LayerMask.GetMask("Player");
@@ -37,10 +38,11 @@ public class ThisIsEnemy : Creature
 
     public void Init(bool isRange, bool canChangeLine, int ZOrder, int line, Creature myEnemy)
     {
+        _skin.ChangeZOrder(ZOrder);
         Init(isRange, canChangeLine, line, myEnemy);
     }
 
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
 
@@ -49,6 +51,8 @@ public class ThisIsEnemy : Creature
         else
             CreateWeapon(PrefabManager.Instance.EnemyMeleeWeapon, false);
 
+        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").transform.GetComponent<SpriteRenderer>());
+
         StartCoroutine(AddToQueueByDistance());
         StartCoroutine(CheckEnemyDistance());
         if (CanChangeLine)
@@ -56,12 +60,13 @@ public class ThisIsEnemy : Creature
         UpdateSpeed();
     }
 
-    private void AddToQueue()
+    public void AddToQueue()
     {
         _input.y = 0f;
-        _rb.velocity = Vector2.zero;
+        _rb.velocity = new Vector2(0f, 0f);
         transform.position = new Vector3(-20f, 0f, 0f);
         _myShadow.transform.position = transform.position;
+        _skin.SetDefaultZOrder();
         Die = true;
         _animator.SetBool("Walk", false);
         UpdateWarning(false);
@@ -70,14 +75,14 @@ public class ThisIsEnemy : Creature
         _inQueue = true;
     }
 
-    public void SetFromQueue(Vector3 position, int line)
+    public void SetFromQueue(Vector3 position, int line, int ZOrder)
     {
+        EditorApplication.isPaused = true;
+
         _inQueue = false;
 
         CurrentLine = line;
         LineToMove = line;
-        UpdateSortingGroup(CurrentLine - 1);
-
         Die = false;
         DisabledInput = false;
 
@@ -89,6 +94,14 @@ public class ThisIsEnemy : Creature
             CreateWeapon(PrefabManager.Instance.EnemyRangeWeapon, true);
         else
             CreateWeapon(PrefabManager.Instance.EnemyMeleeWeapon, true);
+
+        EditorApplication.isPaused = true;
+        _skin.RemoveLastSpriteFromList();
+        EditorApplication.isPaused = true;
+        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").GetComponent<SpriteRenderer>());
+        EditorApplication.isPaused = true;
+        _skin.ChangeZOrder(ZOrder);
+        EditorApplication.isPaused = true;
 
         transform.position = position;
 
@@ -118,16 +131,15 @@ public class ThisIsEnemy : Creature
         }
     }
 
-    protected override void DestroyMe()
+    public override void DestroyMe()
     {
         _input.y = 0f;
         _animator.SetBool("Death", Die);
         UpdateWarning(false);
         UpdateSpeed();
-        UpdateSortingGroup(GameController.Instance.YToLine(_rb.position.y) - 2);
     }
 
-    private void UpdateWarning(bool enable)
+    public void UpdateWarning(bool enable)
     {
         if (_warnObject.activeSelf != enable)
         {
@@ -135,7 +147,7 @@ public class ThisIsEnemy : Creature
         }
     }
 
-    private IEnumerator AddToQueueByDistance()
+    public IEnumerator AddToQueueByDistance()
     {
         while (!_inQueue)
         {
@@ -149,7 +161,7 @@ public class ThisIsEnemy : Creature
         }
     }
 
-    private IEnumerator CheckEnemyDistance()
+    public IEnumerator CheckEnemyDistance()
     {
         while (!_inQueue)
         {
@@ -170,7 +182,7 @@ public class ThisIsEnemy : Creature
         }
     }
 
-    private IEnumerator TimerChangeLine()
+    public IEnumerator TimerChangeLine()
     {
         bool canChLine = true;
 

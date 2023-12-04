@@ -1,30 +1,30 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pickable : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-
     protected int _currentLine = 2;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
     private bool _inQueue;
     public bool InQueue => _inQueue;
 
     private Rigidbody2D _rb;
     private AudioSource _audioSource;
 
-    protected virtual void Awake()
+    public virtual void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _audioSource = GetComponent<AudioSource>();
+
         StartCoroutine(AddToQueueByDistance());
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void Init(int line)
     {
         _currentLine = line;
         SetSprite();
-        SetFromQueue();
+        UpdateSpeed();
     }
 
     public void UpdateSpeed()
@@ -35,14 +35,14 @@ public class Pickable : MonoBehaviour
         }
     }
 
-    protected virtual void SetSprite() { }
+    public virtual void SetSprite() { }
 
-    protected virtual void SetSprite(Sprite sprite)
+    public virtual void SetSprite(Sprite sprite)
     {
         _spriteRenderer.sprite = sprite;
     }
 
-    protected void AddToQueue()
+    public void AddToQueue()
     {
         _inQueue = true;
         _rb.velocity = new Vector2(0, 0);
@@ -52,19 +52,14 @@ public class Pickable : MonoBehaviour
 
     public virtual void SetFromQueue(Vector3 position, int line)
     {
+        _inQueue = false;
         _currentLine = line;
         transform.position = position;
-        SetFromQueue();
-    }
-
-    private void SetFromQueue()
-    {
-        _inQueue = false;
         UpdateSpeed();
         StartCoroutine(AddToQueueByDistance());
     }
 
-    protected void AudioPlay(AudioClip clip, float pitch, float volume)
+    public void AudioPlay(AudioClip clip, float pitch, float volume)
     {
         _audioSource.clip = clip;
         _audioSource.pitch = pitch;
@@ -72,7 +67,7 @@ public class Pickable : MonoBehaviour
         _audioSource.Play();
     }
 
-    private IEnumerator AddToQueueByDistance()
+    public IEnumerator AddToQueueByDistance()
     {
         while (true)
         {

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum MoneyType
@@ -12,9 +14,8 @@ public class MoneyPickable : Pickable
     [SerializeField] private int _cost = 1;
     [SerializeField] private MoneyType _moneyType = MoneyType.coin;
 
-    public void Init(Vector2 position, int line, int cost, MoneyType moneyType)
+    public void Init(int line, int cost, MoneyType moneyType)
     {
-        transform.position = position;
         _cost = cost;
         _moneyType = moneyType;
         Init(line);
@@ -58,12 +59,13 @@ public class MoneyPickable : Pickable
         }
     }
 
-    protected override void SetSprite()
+    public override void SetSprite()
     {
         switch (_moneyType)
         {
             case MoneyType.coin:
-                foreach (Sprite s in PrefabManager.Instance.MoneySprites)
+                List<Sprite> sps = PrefabManager.Instance.MoneySprites;
+                foreach (Sprite s in sps)
                 {
                     if (s == null) continue;
                     string spName = "coin_" + _cost;

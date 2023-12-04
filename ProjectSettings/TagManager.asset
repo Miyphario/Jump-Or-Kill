@@ -55,8 +55,11 @@ TagManager:
   - name: Pickable
     uniqueID: 1023971417
     locked: 0
-  - name: Enemies
+  - name: Enemys
     uniqueID: 2542799877
+    locked: 0
+  - name: Player
+    uniqueID: 2073525891
     locked: 0
   - name: GameParticles
     uniqueID: 2985222731

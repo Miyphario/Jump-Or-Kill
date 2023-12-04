@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class SkinFunctions : MonoBehaviour
 {
-    //private List<SpriteRenderer> _spritesToChange = new();
-    //private List<int> _defaultSpritesOrder = new();
-    //private int _ZOrder = -1;
+    private List<SpriteRenderer> _spritesToChange = new();
+    private List<int> _defaultSpritesOrder = new();
+    private int _ZOrder = -1;
 
     private bool _isPlayer;
     private Creature _myCreature;
@@ -24,88 +24,88 @@ public class SkinFunctions : MonoBehaviour
         _myCreature = creature;
         if (creature is ThisIsPlayer) _isPlayer = true;
 
-        //foreach (var spriteRend in transform.GetComponentsInChildren<SpriteRenderer>())
-        //{
-        //    _spritesToChange.Add(spriteRend);
-        //}
-
-        //UpdateDefaultValues();
+        foreach (var spriteRend in transform.GetComponentsInChildren<SpriteRenderer>())
+        {
+            _spritesToChange.Add(spriteRend);
+        }
 
         _audioSource = GetComponent<AudioSource>();
+
+        UpdateDefaultValues();
     }
 
-    //public void UpdateDefaultValues()
-    //{
-    //    foreach (SpriteRenderer sp in _spritesToChange)
-    //    {
-    //        _defaultSpritesOrder.Add(sp.sortingOrder);
-    //    }
-    //}
+    public void UpdateDefaultValues()
+    {
+        foreach (SpriteRenderer sp in _spritesToChange)
+        {
+            _defaultSpritesOrder.Add(sp.sortingOrder);
+        }
+    }
 
-    //private void Start()
-    //{
-    //    if (_ZOrder > -1)
-    //    {
-    //        ChangeZOrder(_ZOrder);
-    //    }
-    //}
+    private void Start()
+    {
+        if (_ZOrder > -1)
+        {
+            ChangeZOrder(_ZOrder);
+        }
+    }
 
-    //public void ChangeSortingLayer(string layer)
-    //{
-    //    foreach(SpriteRenderer sr in _spritesToChange)
-    //    {
-    //        sr.sortingLayerName = layer;
-    //    }
-    //}
+    public void ChangeSortingLayer(string layer)
+    {
+        foreach(SpriteRenderer sr in _spritesToChange)
+        {
+            sr.sortingLayerName = layer;
+        }
+    }
 
-    //public void ChangeZOrder(int value)
-    //{
-    //    foreach (SpriteRenderer sr in _spritesToChange)
-    //    {
-    //        sr.sortingOrder += value;
-    //    }
-    //}
+    public void ChangeZOrder(int value)
+    {
+        foreach (SpriteRenderer sr in _spritesToChange)
+        {
+            sr.sortingOrder += value;
+        }
+    }
 
-    //public void UpdateZOrder()
-    //{
-    //    if (_ZOrder > -1)
-    //    {
-    //        ChangeZOrder(_ZOrder);
-    //    }
-    //}
+    public void UpdateZOrder()
+    {
+        if (_ZOrder > -1)
+        {
+            ChangeZOrder(_ZOrder);
+        }
+    }
 
-    //public void SetDefaultZOrder()
-    //{
-    //    for (int i = 0; i < _spritesToChange.Count; i++)
-    //    {
-    //        _spritesToChange[i].sortingOrder = _defaultSpritesOrder[i];
-    //    }
-    //}
+    public void SetDefaultZOrder()
+    {
+        for (int i = 0; i < _spritesToChange.Count; i++)
+        {
+            _spritesToChange[i].sortingOrder = _defaultSpritesOrder[i];
+        }
+    }
 
-    //public void ChangeMaskInteraction(SpriteMaskInteraction spriteMask)
-    //{
-    //    foreach (SpriteRenderer sr in _spritesToChange)
-    //    {
-    //        sr.maskInteraction = spriteMask;
-    //    }
-    //}
+    public void ChangeMaskInteraction(SpriteMaskInteraction spriteMask)
+    {
+        foreach (SpriteRenderer sr in _spritesToChange)
+        {
+            sr.maskInteraction = spriteMask;
+        }
+    }
 
-    //public void AddSpriteToList(SpriteRenderer spriteRenderer)
-    //{
-    //    _spritesToChange.Add(spriteRenderer);
-    //    _defaultSpritesOrder.Add(spriteRenderer.sortingOrder);
-    //}
+    public void AddSpriteToList(SpriteRenderer spriteRenderer)
+    {
+        _spritesToChange.Add(spriteRenderer);
+        _defaultSpritesOrder.Add(spriteRenderer.sortingOrder);
+    }
 
-    //public void RemoveSpriteFromList(int index)
-    //{
-    //    _spritesToChange.RemoveAt(index);
-    //    _defaultSpritesOrder.RemoveAt(index);
-    //}
+    public void RemoveSpriteFromList(int index)
+    {
+        _spritesToChange.RemoveAt(index);
+        _defaultSpritesOrder.RemoveAt(index);
+    }
 
-    //public void RemoveLastSpriteFromList()
-    //{
-    //    RemoveSpriteFromList(_spritesToChange.Count - 1);
-    //}
+    public void RemoveLastSpriteFromList()
+    {
+        RemoveSpriteFromList(_spritesToChange.Count - 1);
+    }
 
     public void Attack()
     {

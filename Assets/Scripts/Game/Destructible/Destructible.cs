@@ -19,21 +19,30 @@ public class Destructible : MonoBehaviour
     protected SpriteRenderer _mySprite;
     protected AudioSource _audioSource;
 
-    protected virtual void Awake()
+    public virtual void Awake()
     {
         _mySprite = transform.Find("Sprite").transform.GetComponent<SpriteRenderer>();
         _audioSource = GetComponent<AudioSource>();
+
         _skin = _mySprite.transform.GetComponent<SkinFunctions>();
+        _skin.AddSpriteToList(_mySprite);
+
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(int line, Creature myEnemy)
+    public void Init(int ZOrder)
+    {
+        _skin.ChangeZOrder(ZOrder);
+    }
+
+    public void Init(int ZOrder, int line, Creature myEnemy)
     {
         _currentLine = line;
         _myEnemy = myEnemy;
+        Init(ZOrder);
     }
 
-    protected virtual void Start()
+    public virtual void Start()
     {
         StartCoroutine(AddToQueueByDistance());
         UpdateSpeed();
@@ -69,13 +78,14 @@ public class Destructible : MonoBehaviour
         }
     }
 
-    private void AddToQueue()
+    public void AddToQueue()
     {
         _inQueue = true;
         _inputX = 0f;
         _rb.velocity = new Vector2(0f, 0f);
         transform.position = new Vector3(-20f, 0f, 0f);
         _mySprite.sortingOrder = -1;
+        _skin.SetDefaultZOrder();
         StopAllCoroutines();
     }
 
@@ -85,13 +95,18 @@ public class Destructible : MonoBehaviour
         transform.position = position;
         _activated = true;
 
+        //if (_skin._ZOrder > -1)
+        //{
+        //    _skin.ChangeZOrder(_skin._ZOrder);
+        //}
+
         _inQueue = false;
 
         StartCoroutine(AddToQueueByDistance());
         UpdateSpeed();
     }
 
-    private IEnumerator AddToQueueByDistance()
+    public IEnumerator AddToQueueByDistance()
     {
         while (!_inQueue)
         {

@@ -39,7 +39,7 @@ public class RangeWeapon : Weapon
         // Calculate near line
         if (_myCreature.CurrentLine != _myCreature.LineToMove)
         {
-            bull._currentLine = GameController.Instance.YToLine(_myCreature.transform.position.y);
+            bull._currentLine = _myCreature.YToLine(_myCreature.transform.position.y);
         }
         else
         {
@@ -47,8 +47,6 @@ public class RangeWeapon : Weapon
         }
 
         bull.transform.rotation = _myCreature.transform.rotation;
-        bull._bulletSpeed = _bulletSpeed + GameController.Instance.PlayerSpeed;
-        bull._bullRotateSpeed = _bullRotateSpeed + GameController.Instance.PlayerSpeed / 4f;
         Rigidbody2D bRb = bull.GetComponent<Rigidbody2D>();
         if (_isPlayer)
             bRb.velocity = new Vector2(_bulletSpeed, 0f);
@@ -86,7 +84,7 @@ public class RangeWeapon : Weapon
     {
         if (_isBullet)
         {
-            transform.Rotate(new(0f, 0f, -_bullRotateSpeed));
+            transform.Rotate(new Vector3(0f, 0f, -_bullRotateSpeed));
         }
     }
 

@@ -1026,8 +1026,6 @@ MonoBehaviour:
   _audioManager: {fileID: 958737355}
   _prefabManager: {fileID: 1925023964}
   _gameHud: {fileID: 1599574155}
-  _spawner: {fileID: 1323329279}
-  _scroller: {fileID: 234458267}
 --- !u!1 &579490659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2355,11 +2353,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046c5ebb6d8123049a6e850a0e4e3656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moneyObject: {fileID: 7379975864332111517, guid: 7e2b429956ad36441ac70ef50c2401e4,
+  moneyObject: {fileID: 7379975864332111517, guid: 7e2b429956ad36441ac70ef50c2401e4,
     type: 3}
-  _snowballChance: 35
-  _gemChance: 0.05
-  _enemyPrefab: {fileID: 3025886856946869231, guid: d1315bd5ebcc6624599bf62fef2f348f,
+  maxCoinsSpawned: 3
+  increaseCoinsInLine: 0
+  increaseCoinsInLineMax: 25
+  maxQueueMoneys: 50
+  timeToNextMoneyLine: 7
+  snowballChance: 35
+  gemChance: 0.05
+  enemyPrefab: {fileID: 3025886856946869231, guid: d1315bd5ebcc6624599bf62fef2f348f,
     type: 3}
   maxEnemiesInLine: 1
   increaseEnemiesInLine: 0
@@ -2367,12 +2370,14 @@ MonoBehaviour:
   rangeEnemyChance: 35
   lineChangingEnemyChance: 35
   maxQueueEnemies: 50
+  timeToNextEnemyLine: 7
   destructiblePrefab: {fileID: 6599673948747077952, guid: 149c4f32a49a3ff46890f5407c802228,
     type: 3}
   maxDestructibleInLine: 2
   increaseDestructibleInLine: 0
   increaseDestructibleInLineMax: 20
   maxQueueDestructible: 50
+  gameController: {fileID: 1548125759}
 --- !u!4 &1323329280
 Transform:
   m_ObjectHideFlags: 0
@@ -2916,7 +2921,7 @@ MonoBehaviour:
     snowballs: 0
     gems: 0
     adsMoney: 0
-  _road: {fileID: 0}
+  road: {fileID: 234458267}
   _spawner: {fileID: 1323329279}
   _moneyQueueObject: {fileID: 1485315298}
   _enemiesQueueObject: {fileID: 284885841}

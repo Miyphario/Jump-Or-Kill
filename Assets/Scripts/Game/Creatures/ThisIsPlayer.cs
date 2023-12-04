@@ -6,7 +6,7 @@ public class ThisIsPlayer : Creature
     public int Kills => _kills;
     private float _timerToChangeLine;
 
-    protected override void Awake()
+    public override void Awake()
     {
         base.Awake();
         _attackLayers = LayerMask.GetMask("Enemy");
@@ -14,17 +14,15 @@ public class ThisIsPlayer : Creature
         CreateWeapon(GameController.Instance.LoadCurrentWeapon(), false);
     }
 
-    protected override void Start()
+    public override void Start()
     {
         base.Start();
+
+        _skin.AddSpriteToList(_weapon.transform.Find("Sprite").GetComponent<SpriteRenderer>());
+        _skin.ChangeSortingLayer("Player");
     }
 
-    protected override void UpdateSortingGroup(int sortingOrder)
-    {
-        base.UpdateSortingGroup(sortingOrder + 1);
-    }
-
-    protected override void Update()
+    public override void Update()
     {
         base.Update();
 
@@ -63,7 +61,7 @@ public class ThisIsPlayer : Creature
         return t;
     }
 
-    protected override void DestroyMe()
+    public override void DestroyMe()
     {
         GameController.GameOver();
     }

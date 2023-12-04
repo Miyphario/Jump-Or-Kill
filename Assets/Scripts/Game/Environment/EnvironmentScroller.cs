@@ -2,35 +2,33 @@ using UnityEngine;
 
 public class EnvironmentScroller : MonoBehaviour
 {
-    private float _width;
-    private Rigidbody2D _rb;
     private BoxCollider2D _collision;
+    private Rigidbody2D _rb;
 
-    private void Awake()
+    private float _width;
+
+    private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
         _collision = GetComponent<BoxCollider2D>();
+        _rb = GetComponent<Rigidbody2D>();
 
         _width = _collision.size.x;
         _collision.enabled = false;
-    }
 
-    public void Init()
-    {
-        GameController.Instance.OnSpeedUpdated += HandleUpdateSpeed;
+        UpdateSpeed();
     }
 
     private void Update()
     {
         if (transform.position.x < -_width)
         {
-            Vector2 resetPos = new(_width * transform.localScale.x, 0f);
+            Vector2 resetPos = new Vector2(_width * transform.localScale.x, 0f);
             transform.position = (Vector2)transform.position + resetPos;
         }
     }
 
-    private void HandleUpdateSpeed(float speed)
+    public void UpdateSpeed()
     {
-        _rb.velocity = new Vector2(-speed, 0);
+        _rb.velocity = new Vector2(-GameController.Instance.PlayerSpeed, 0);
     }
 }

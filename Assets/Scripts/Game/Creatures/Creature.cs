@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Creature : MonoBehaviour
 {
@@ -33,16 +32,14 @@ public class Creature : MonoBehaviour
     protected Rigidbody2D _rb;
     protected Animator _animator;
     protected GameObject _myShadow;
-    private SortingGroup _sortingGroup;
 
-    protected virtual void Awake()
+    public virtual void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _sortingGroup = GetComponent<SortingGroup>();
         UpdateSkin();
     }
 
-    protected virtual void Start()
+    public virtual void Start()
     {
         CreateShadow();
     }
@@ -62,12 +59,6 @@ public class Creature : MonoBehaviour
         _skin.Init(this);
         _animator = _skin.GetComponent<Animator>();
     }
-
-    protected virtual void UpdateSortingGroup(int sortingOrder)
-    {
-        _sortingGroup.sortingOrder = sortingOrder;
-    }
-
     private void CreateShadow()
     {
         _myShadow = Instantiate(PrefabManager.Instance.CreatureShadow, new Vector3(transform.position.x, transform.position.y - 0.85f, transform.position.z), Quaternion.identity);
@@ -79,7 +70,7 @@ public class Creature : MonoBehaviour
         _weapon.Attack();
     }
 
-    protected void CreateWeapon(GameObject weaponToCreate, bool update)
+    public void CreateWeapon(GameObject weaponToCreate, bool update)
     {
         if (weaponToCreate == null) return;
 
@@ -121,7 +112,7 @@ public class Creature : MonoBehaviour
         return false;
     }
 
-    protected virtual void DestroyMe()
+    public virtual void DestroyMe()
     {
         /*
         Destroy(myShadow);
@@ -166,7 +157,6 @@ public class Creature : MonoBehaviour
 
             LineToMove = CurrentLine + line;
             _input.y = -1f;
-            UpdateSortingGroup(LineToMove - 1);
         }
 
         // Move up
@@ -176,13 +166,12 @@ public class Creature : MonoBehaviour
 
             LineToMove = CurrentLine + line;
             _input.y = 1f;
-            UpdateSortingGroup(LineToMove - 1);
         }
 
         _skin.AudioPlay(clip, pitch, volume);
     }
 
-    protected virtual void Update()
+    public virtual void Update()
     {
         if (!DisabledInput && !Die)
         {
@@ -192,7 +181,7 @@ public class Creature : MonoBehaviour
 
                 if (CurrentLine != LineToMove)
                 {
-                    float posY = GameController.Instance.LineToY(LineToMove);
+                    float posY = LineToY(LineToMove);
                     _rb.position = new(_rb.position.x, Mathf.MoveTowards(_rb.position.y, posY, Speed.y * Time.deltaTime));
                     if (Mathf.Abs(_rb.position.y - posY) <= 0.1f)
                     {
@@ -219,7 +208,7 @@ public class Creature : MonoBehaviour
             }
             else
             {
-                float posY = GameController.Instance.LineToY(CurrentLine);
+                float posY = LineToY(CurrentLine);
                 _floor.transform.parent.position = new(transform.position.x, posY);
 
                 if (_rb.velocity.y <= 0f)
@@ -234,13 +223,13 @@ public class Creature : MonoBehaviour
         Vector3 shPos = new(transform.position.x, transform.position.y - 0.85f, transform.position.z);
         if (InAir)
         {
-            shPos.y = GameController.Instance.LineToY(CurrentLine) - 0.85f;
+            shPos.y = LineToY(CurrentLine) - 0.85f;
         }
 
         _myShadow.transform.position = shPos;
     }
 
-    protected virtual void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (DisabledInput || Die) return;
 
@@ -274,7 +263,7 @@ public class Creature : MonoBehaviour
         {
             if (InAir)
             {
-                float posY = GameController.Instance.LineToY(CurrentLine);
+                float posY = LineToY(CurrentLine);
                 _rb.velocity = new Vector2(_rb.velocity.x, 0f);
                 _rb.position = new Vector3(_rb.position.x, posY);
 
@@ -296,7 +285,39 @@ public class Creature : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    public float LineToY(int line)
+    {
+        return line switch
+        {
+            1 => GameController.Instance.RoadYs[0],
+            2 => GameController.Instance.RoadYs[1],
+            3 => GameController.Instance.RoadYs[2],
+            _ => 0f,
+        };
+    }
+
+    public int YToLine(float posY)
+    {
+        float diff = float.MaxValue;
+        int curLine = 0;
+
+        int i = 1;
+        foreach (float p in GameController.Instance.RoadYs)
+        {
+            float dist = Mathf.Abs(p - posY);
+            if (dist < diff)
+            {
+                curLine = i;
+                diff = dist;
+            }
+
+            i++;
+        }
+
+        return curLine;
+    }
+
+    public void OnDrawGizmosSelected()
     {
         if (!Application.isPlaying) return;
 
